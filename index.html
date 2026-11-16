@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIXIT ENTERTAINMENT — Quiet Tokyo</title>
+    <style>
+        /* --- ИМПОРТ ШРИФТОВ --- */
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap');
+
+        /* --- ПЕРЕМЕННЫЕ --- */
+        :root {
+            --bg-color: #080808;
+            --bg-light: #111111;
+            --text-main: #d4d4d4;
+            --text-muted: #777777;
+            --accent-white: #f5f5f5;
+            --accent-grey: #2a2a2a;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+            --border-color: #222222;
+            --lace-pattern: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q10 0 20 20 T40 20" fill="none" stroke="%23333" stroke-width="1"/><circle cx="20" cy="20" r="2" fill="%23333"/></svg>');
+        }
+
+        /* --- СБРОС --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            overflow-x: hidden;
+            /* Текстура шума */
+            background-image: url('data:image/svg+xml;utf8,<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+        }
+
+        /* --- СКРОЛЛБАР --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-grey); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* --- ТИПОГРАФИКА --- */
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        h2 {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 60px;
+            height: 1px;
+            background: var(--accent-white);
+        }
+
+        h2 span {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 4px;
+            font-weight: 300;
+        }
+
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-white);
+            font-style: italic;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-weight: 300;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* --- АНИМАЦИИ ПОЯВЛЕНИЯ --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ГЛАВНЫЙ ЭКРАН (HERO) --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #151515 0%, #080808 70%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .hero-content { z-index: 2; }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 12px;
+            color: var(--accent-white);
+            text-shadow: 0 0 40px rgba(255,255,255,0.1);
+        }
+
+        .hero .subtitle {
+            font-family: var(--font-sans);
+            letter-spacing: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 3rem;
+            color: var(--text-muted);
+            font-weight: 200;
+        }
+
+        .hero .tagline {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-style: italic;
+            margin-bottom: 3rem;
+            padding: 1.5rem 3rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            letter-spacing: 2px;
+            color: var(--accent-white);
+        }
+
+        .hero .intro-text {
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+
+        /* Виджет погоды */
+        .weather-widget {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.85);
+            padding: 1.5rem 3rem;
+            border: 1px solid var(--border-color);
+            font-family: var(--font-sans);
+            text-align: center;
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+            z-index: 3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        .weather-widget .city { font-size: 0.9rem; color: var(--text-muted); }
+        .weather-widget .temp { font-size: 2.5rem; font-weight: 200; color: var(--accent-white); margin: 0.2rem 0; }
+        .weather-widget .desc { font-size: 0.7rem; color: #666; letter-spacing: 2px; }
+
+        /* --- СЕКЦИИ --- */
+        .section {
+            padding: 8rem 10%;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+
+        .section-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- БЛОК КОНЦЕПЦИИ (QUIET TOKYO) --- */
+        .concept-box {
+            background: #0c0c0c;
+            padding: 4rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            margin-top: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Кружевная рамка */
+        .concept-box::before {
+            content: '';
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+            border-style: double;
+        }
+
+        /* Декоративный горошек в углу */
+        .concept-box::after {
+            content: '';
+            position: absolute;
+            top: -10px; right: -10px;
+            width: 60px; height: 60px;
+            background-image: radial-gradient(circle, var(--text-muted) 1.5px, transparent 1.5px);
+            background-size: 12px 12px;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .concept-box h3 { position: relative; z-index: 1; }
+        .concept-box p { position: relative; z-index: 1; font-size: 1.05rem; }
+
+        /* --- НАПРАВЛЕНИЯ (КАРТОЧКИ) --- */
+        .directions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .direction-card {
+            background: #0c0c0c;
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .direction-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--accent-white);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .direction-card:hover {
+            background: #141414;
+            border-color: #444;
+            transform: translateY(-5px);
+        }
+
+        .direction-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .direction-card .num {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .direction-card strong {
+            color: var(--accent-white);
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .direction-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* --- ФОРМЫ (ЗАЯВКИ) --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3rem; letter-spacing: 6px; }
+            .hero .tagline { font-size: 1.2rem; padding: 1rem; }
+            .section { padding: 5rem 5%; }
+            h2 { font-size: 2rem; }
+        }
+
+        .form-block {
+            background: #0c0c0c;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .form-block::before {
+            content: '✧';
+            position: absolute;
+            top: -12px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-light);
+            padding: 0 10px;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .form-block h4 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            color: var(--accent-white);
+        }
+
+        .form-block .form-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: var(--accent-white);
+            padding: 0.8rem 0;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            border-bottom-color: var(--accent-white);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .form-group input::placeholder { color: #444; }
+
+        /* Кнопка отправки */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--accent-white);
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--accent-white);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .submit-btn:hover::before { left: 0; }
+        .submit-btn:hover { color: var(--bg-color); border-color: var(--accent-white); }
+
+        /* --- ПРАВИЛА --- */
+        .rules-list {
+            list-style: none;
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .rules-list { grid-template-columns: 1fr; }
+        }
+        
+        .rules-list li {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            font-size: 0.9rem;
+            background: #0c0c0c;
+            transition: border-color 0.3s;
+        }
+
+        .rules-list li:hover { border-color: #444; }
+        
+        .rules-list li::before {
+            content: '✧';
+            position: absolute;
+            top: -10px; left: 20px;
+            background: var(--bg-color);
+            padding: 0 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .section:nth-child(even) .rules-list li::before {
+            background: var(--bg-light);
+        }
+
+        /* --- ПОДВАЛ --- */
+        footer {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: #050505;
+            position: relative;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            letter-spacing: 8px;
+            margin-bottom: 0.5rem;
+            color: var(--accent-white);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-tagline {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 3.5rem;
+            border: 1px solid var(--accent-white);
+            color: var(--accent-white);
+            font-family: var(--font-sans);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        .contact-btn:hover {
+            background: var(--accent-white);
+            color: var(--bg-color);
+        }
+
+        .contact-btn svg {
+            width: 16px; height: 16px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: #444;
+            letter-spacing: 1px;
+        }
+
+        /* Декоративный разделитель */
+        .polka-dot-divider {
+            height: 12px;
+            background-image: radial-gradient(circle, var(--text-muted) 1px, transparent 1px);
+            background-size: 12px 12px;
+            margin: 3rem auto;
+            max-width: 200px;
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <header class="hero">
+        <div class="hero-content reveal">
+            <h1>LIXIT</h1>
+            <div class="subtitle">ENTERTAINMENT</div>
+            <div class="tagline">A QUIET CITY. A NEW SOUND. A NEW STORY.</div>
+            <div class="intro-text">
+                <p>Добро пожаловать в LIXIT — независимую развлекательную компанию, созданную для талантливых, целеустремлённых и творческих людей.</p>
+                <p>Мы объединяем людей, которые хотят развиваться, пробовать новое и создавать собственную историю в индустрии развлечений.</p>
+                <p>LIXIT — это не просто компания. Это пространство, в котором каждый может найти своё место, раскрыть потенциал и стать частью чего-то большего.</p>
+            </div>
+        </div>
+        
+        <div class="weather-widget">
+            <div class="city">Tokyo</div>
+            <div class="temp">17°</div>
+            <div class="desc">MOSTLY CLOUDY<br>H:15° L:16°</div>
+        </div>
+    </header>
+
+    <!-- 01. ABOUT -->
+    <section class="section">
+        <div class="section-content reveal">
+            <h2>01 <span>ABOUT LIXIT</span></h2>
+            <h3>О компании</h3>
+            <p>LIXIT — независимый entertainment-лейбл, ориентированный на развитие артистов, создание творческих проектов и формирование собственной индустрии.</p>
+            <p>Наша главная цель — предоставить участникам комфортную среду для самореализации, сотрудничества и профессионального роста.</p>
+            <p>Мы ценим индивидуальность, ответственность, инициативность и желание двигаться вперёд.</p>
+            <p>В LIXIT каждый участник является частью общей истории, а его вклад имеет значение.</p>
+        </div>
+    </section>
+
+    <!-- 02. CONCEPT -->
+    <section class="section">
+        <div class="section-content reveal">
+            <h2>02 <span>OUR CONCEPT</span></h2>
+            <div class="concept-box">
+                <h3>Quiet Tokyo</h3>
+                <p>Токио никогда не спит, но даже в самом шумном городе существуют моменты тишины.</p>
+                <p>Ночные улицы, мягкое освещение витрин, отражения неоновых вывесок на мокром асфальте, пустые станции метро и спокойствие среди миллионов огней.</p>
+                <p>Именно эта атмосфера стала основой концепции LIXIT.</p>
+                <p>Мы вдохновляемся эстетикой японского мегаполиса, его контрастами, минимализмом и особенной атмосферой городской жизни.</p>
+                <p>Наш стиль — сдержанный, загадочный и современный.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03. DIRECTION -->
+    <section class="section">
+        <div class="section-content reveal">
+            <h2>03 <span>OUR DIRECTION</span></h2>
+            <h3>Направления деятельности</h3>
+            <p>LIXIT развивается сразу в нескольких направлениях:</p>
+            
+            <div class="directions-grid">
+                <div class="direction-card">
+                    <span class="num">01</span>
+                    <strong>Artist management</strong
+                                                                   <p>Работа с артистами и развитие их творческого потенциала.</p>
+                </div>
+                <div class="direction-card">
+                    <span class="num">02</span>
+                    <strong>Creative production</strong>
+                    <p>Разработка концепций, творческих идей и проектов.</p>
+                </div>
+                <div class="direction-card">
+                    <span class="num">03</span>
+                    <strong>Media & design</strong>
+                    <p>Визуальное оформление, информационные материалы и продвижение.</p>
+                </div>
+                <div class="direction-card">
+                    <span class="num">04</span>
+                    <strong>Entertainment projects</strong>
+                    <p>Организация внутренних и совместных мероприятий.</p>
+                </div>
+                <div class="direction-card">
+                    <span class="num">05</span>
+                    <strong>Collaboration</strong>
+                    <p>Сотрудничество с другими компаниями и независимыми проектами.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04. JOIN -->
+    <section class="section">
+        <div class="section-content reveal">
+            <h2>04 <span>JOIN LIXIT</span></h2>
+            <h3>Стань частью нашей истории</h3>
+            <p>Мы открываем набор для людей, которые хотят присоединиться к LIXIT и стать частью нашей команды.</p>
+            <p>В компании предусмотрены два основных направления вступления:</p>
+            
+            <div class="polka-dot-divider"></div>
+
+            <div class="form-grid">
+                <!-- Форма артиста -->
+                <div class="form-block">
+                    <h4>ARTIST APPLICATION</h4>
+                    <p class="form-desc">Для тех, кто хочет развиваться в качестве артиста, создавать собственный образ, участвовать в проектах и представлять LIXIT.</p>
+                    
+                    <form action="#" method="POST" id="artistForm">
+                        <div class="form-group">
+                            <label>01. Псевдоним (на английском)</label>
+                            <input type="text" name="artist_nickname" placeholder="Введите псевдоним" required>
+                        </div>
+                        <div class="form-group">
+                            <label>02. Возраст</label>
+                            <input type="number" name="artist_age" placeholder="18" required>
+                        </div>
+                        <div class="form-group">
+                            <label>03. Дата рождения</label>
+                            <input type="date" name="artist_dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label>04. Ваш прототип</label>
+                            <input type="text" name="artist_prototype" placeholder="Кто вас вдохновляет?">
+                        </div>
+                        <div class="form-group">
+                            <label>05. Желаемое направление</label>
+                            <input type="text" name="artist_direction" placeholder="соло / группа">
+                        </div>
+                        <div class="form-group">
+                            <label>06. Предпочитаемый жанр</label>
+                            <input type="text" name="artist_genre" placeholder="k-pop / dance">
+                        </div>
+                        <div class="form-group">
+                            <label>07. Опыт в подобных проектах</label>
+                            <input type="text" name="artist_experience" placeholder="Кратко опишите">
+                        </div>
+                        <div class="form-group">
+                            <label>08. Время, которое готовы уделять</label>
+                            <input type="text" name="artist_time" placeholder="Например: 3-4 часа в день">
+                        </div>
+                        <div class="form-group">
+                            <label>09. Активность (1-10)</label>
+                            <input type="number" name="artist_activity" min="1" max="10" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>10. Ответственность (1-10)</label>
+                            <input type="number" name="artist_responsibility" min="1" max="10" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>11. Почему хотите стать частью LIXIT?</label>
+                            <textarea name="artist_why" rows="3" placeholder="Ваш ответ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>12. Какие цели ставите?</label>
+                            <textarea name="artist_goals" rows="3" placeholder="Ваш ответ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>13. Готовы соблюдать правила?</label>
+                            <input type="text" name="artist_rules" placeholder="Да / Нет">
+                        </div>
+                        <div class="form-group">
+                            <label>14. Контакт для связи</label>
+                            <input type="text" name="artist_contact" placeholder="@username или ссылка" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить заявку</button>
+                    </form>
+                </div>
+
+                <!-- Форма стаффа -->
+                <div class="form-block">
+                    <h4>STAFF APPLICATION</h4>
+                    <p class="form-desc">Для тех, кто хочет работать над развитием компании, помогать в организации проектов и заниматься внутренней деятельностью лейбла.</p>
+                    
+                    <form action="#" method="POST" id="staffForm">
+                        <div class="form-group">
+                            <label>01. Имя или псевдоним</label>
+                            <input type="text" name="staff_name" placeholder="Введите имя" required>
+                        </div>
+                        <div class="form-group">
+                            <label>02. Возраст</label>
+                            <input type="number" name="staff_age" placeholder="18" required>
+                        </div>
+                        <div class="form-group">
+                            <label>03. Дата рождения</label>
+                            <input type="date" name="staff_dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label>04. Желаемая должность</label>
+                            <input type="text" name="staff_position" placeholder="Например: менеджер, дизайнер">
+                        </div>
+                        <div class="form-group">
+                            <label>05. Опыт работы</label>
+                            <input type="text" name="staff_experience" placeholder="Кратко опишите">
+                        </div>
+                        <div class="form-group">
+                            <label>06. Навыки</label>
+                            <input type="text" name="staff_skills" placeholder="Чем вы можете помочь?">
+                        </div>
+                        <div class="form-group">
+                            <label>07. Время для работы</label>
+                            <input type="text" name="staff_time" placeholder="Например: 2-3 часа в день">
+                        </div>
+                        <div class="form-group">
+                            <label>08. Активность (1-10)</label>
+                            <input type="number" name="staff_activity" min="1" max="10" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>09. Ответственность (1-10)</label>
+                            <input type="number" name="staff_responsibility" min="1" max="10" placeholder="10">
+                        </div>
+                        <div class="form-group">
+                            <label>10. Умеете работать в команде?</label>
+                            <input type="text" name="staff_teamwork" placeholder="Да / Нет">
+                        </div>
+                        <div class="form-group">
+                            <label>11. Почему выбрали LIXIT?</label>
+                            <textarea name="staff_why" rows="3" placeholder="Ваш ответ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>12. Что привнесёте в развитие?</label>
+                            <textarea name="staff_contribution" rows="3" placeholder="Ваш ответ..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>13. Готовы выполнять поручения?</label>
+                            <input type="text" name="staff_tasks" placeholder="Да / Нет">
+                        </div>
+                        <div class="form-group">
+                            <label>14. Контакт для связи</label>
+                            <input type="text" name="staff_contact" placeholder="@username или ссылка" required>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить заявку</button>
+                    </form>
+                </div>
+            </div>
+            
+            <p style="margin-top: 3rem; font-size: 0.85rem; color: var(--text-muted); text-align: center; font-style: italic;">
+                Перед отправкой заявки внимательно ознакомьтесь с требованиями и заполните все необходимые пункты.
+            </p>
+        </div>
+    </section>
+
+    <!-- 05. RULES -->
+    <section class="section">
+        <div class="section-content reveal">
+            <h2>05 <span>APPLICATION RULES</span></h2>
+            <h3>Правила подачи заявок</h3>
+            
+            <ul class="rules-list">
+                <li>Заполняйте анкету самостоятельно и внимательно.</li>
+                <li>Не пропускайте обязательные пункты.</li>
+                <li>Предоставляйте достоверную информацию.</li>
+                <li>Не отправляйте одну заявку несколько раз.</li>
+                <li>После отправки дождитесь ответа руководства.</li>
+                <li>Если в течение трёх дней после подачи заявки вы не получили ответа, заявка считается непринятой.</li>
+            </ul>
+            <p style="margin-top: 3rem; font-style: italic; color: var(--text-muted); text-align: center;">Решение о принятии принимается руководством компании.</p>
+        </div>
+    </section>
+
+    <!-- 06. CONTACT -->
+    <footer>
+        <div class="reveal">
+            <h2 style="border: none; justify-content: center; margin-bottom: 1rem; font-size: 1.2rem; letter-spacing: 6px; color: var(--text-muted);">06 CONTACT</h2>
+            <h3 style="font-size: 2.5rem;">Связь с LIXIT</h3>
+            <p style="max-width: 600px; margin: 1rem auto 3rem;">По вопросам вступления, сотрудничества и деятельности компании обращайтесь к нашему официальному боту.</p>
+            
+            <a href="https://t.me/lixit_entbot" target="_blank" class="contact-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.832.942z"/></svg>
+                Telegram: @lixit_entbot
+            </a>
+
+            <div class="polka-dot-divider"></div>
+
+            <div class="footer-logo">LIXIT ENTERTAINMENT</div>
+            <div class="footer-tagline">Find your place in the quiet city.</div>
+            
+            <div class="footer-bottom">
+                &copy; 2026 LIXIT ENTERTAINMENT. ALL RIGHTS RESERVED.
+            </div>
+        </div>
+    </footer>
+
+    <!-- СКРИПТ ДЛЯ АНИМАЦИИ ПОЯВЛЕНИЯ И ОБРАБОТКИ ФОРМ -->
+    <script>
+        // Анимация появления при скролле
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Имитация отправки форм
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('.submit-btn');
+                const originalText = btn.innerText;
+                
+                btn.innerText = 'Отправка...';
+                btn.style.opacity = '0.7';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    btn.innerText = '✓ Отправлено';
+                    btn.style.borderColor = '#4a4a4a';
+                    btn.style.color = '#888';
+                    
+                    setTimeout(() => {
+                        form.reset();
+                        btn.innerText = originalText;
+                        btn.style.opacity = '1';
+                        btn.style.borderColor = 'var(--text-muted)';
+                        btn.style.color = 'var(--accent-white)';
+                        btn.disabled = false;
+                    }, 3000);
+                }, 1500);
+            });
+        });
+    </script>
+
+</body>
+</html>
